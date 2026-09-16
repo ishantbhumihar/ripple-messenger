@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Profile · Ripple</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="messenger-view" class="messenger">
+      <aside class="sidebar">
+        <a href="/" class="brand brand-link"><span>⌁</span> ripple</a>
+        <div class="me-card">
+          <span id="my-avatar" class="avatar"></span>
+          <div>
+            <b id="my-name"></b>
+            <small id="my-handle"></small>
+          </div>
+        </div>
+        <nav>
+          <a href="/" class="nav-button" data-screen="chats">⌂ <span>Messages</span></a>
+          <a href="/discover" class="nav-button" data-screen="discover">⌕ <span>Discover</span></a>
+          <a href="/requests" class="nav-button" data-screen="requests">♡ <span>Requests</span><i id="request-count" hidden></i></a>
+          <a href="/profile" class="nav-button active" data-screen="profile">⚙ <span>Profile</span></a>
+        </nav>
+        <button id="logout" class="logout" type="button">↪ Log out</button>
+        <div class="privacy-note">
+          ◈ <span><b>Private by design</b><small>One person at a time. No groups.</small></span>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="screen narrow">
+          <header class="screen-header">
+            <div>
+              <p class="eyebrow">YOUR PROFILE</p>
+              <h2>How people find you</h2>
+            </div>
+          </header>
+
+          <form id="profile-form" class="profile-form">
+            <div id="profile-avatar" class="profile-avatar"></div>
+            <label>Display name
+              <input id="profile-name" required maxlength="60">
+            </label>
+            <label>Username
+              <input id="profile-username" required maxlength="30">
+              <small>People can search your username.</small>
+            </label>
+            <label>Bio
+              <textarea id="profile-bio" maxlength="160" rows="4" placeholder="A little about you"></textarea>
+            </label>
+            <button id="profile-save" class="primary" type="submit">Save profile</button>
+            <p id="profile-note" class="form-note"></p>
+          </form>
+
+          <div class="profile-section">
+            <h3>Change Password</h3>
+            <p>Update your password to keep your account secure.</p>
+            <form id="password-form" class="profile-form">
+              <label>Current Password
+                <input id="current-password" type="password" required autocomplete="current-password" placeholder="Your existing password">
+              </label>
+              <label>New Password
+                <input id="new-password" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters">
+              </label>
+              <label>Confirm New Password
+                <input id="confirm-new-password" type="password" required minlength="8" autocomplete="new-password" placeholder="Re-enter new password">
+              </label>
+              <button id="password-save" class="primary" type="submit">Update password</button>
+              <p id="password-note" class="form-note"></p>
+            </form>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+  <div id="toast" hidden></div>
+  <script src="shared.js"></script>
+  <script src="profile.js"></script>
+</body>
+</html>

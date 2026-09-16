@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Log in · Ripple</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <section class="auth-view">
+      <div class="brand"><span>⌁</span> ripple</div>
+      <div class="auth-card">
+        <p class="eyebrow">ONE-TO-ONE MESSAGING</p>
+        <h1>Keep your conversations personal.</h1>
+        <p class="subtle">Find someone, send a request, and chat only when they accept. No groups, ever.</p>
+        <div class="auth-tabs">
+          <button class="active" data-mode="login">Log in</button>
+          <button data-mode="signup">Create account</button>
+        </div>
+        <form id="auth-form" data-mode="login">
+          <label class="signup-only" hidden>Display name
+            <input id="name" maxlength="60" placeholder="Your name">
+          </label>
+          <label class="signup-only" hidden>Username
+            <input id="username" maxlength="30" placeholder="e.g. alex_89">
+            <small>Letters, numbers, and underscores only.</small>
+          </label>
+          <label>Email
+            <input id="email" type="email" required autocomplete="email" placeholder="you@example.com">
+          </label>
+          <label>Password
+            <input id="password" type="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters">
+          </label>
+          <div class="login-only auth-sub-links" id="forgot-pw-container">
+            <a href="/forgot-password" class="auth-link">Forgot password?</a>
+          </div>
+          <button id="auth-submit" class="primary" type="submit">Log in</button>
+        </form>
+        <p id="auth-error" class="form-note" role="alert"></p>
+      </div>
+    </section>
+  </main>
+  <div id="toast" hidden></div>
+  <script src="shared.js"></script>
+  <script src="login.js"></script>
+</body>
+</html>

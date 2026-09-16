@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Messages · Ripple</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app" class="app-shell">
+    <section id="messenger-view" class="messenger">
+      <aside class="sidebar">
+        <a href="/" class="brand brand-link"><span>⌁</span> ripple</a>
+        <div class="me-card">
+          <span id="my-avatar" class="avatar"></span>
+          <div>
+            <b id="my-name"></b>
+            <small id="my-handle"></small>
+          </div>
+        </div>
+        <nav>
+          <a href="/" class="nav-button active" data-screen="chats">⌂ <span>Messages</span></a>
+          <a href="/discover" class="nav-button" data-screen="discover">⌕ <span>Discover</span></a>
+          <a href="/requests" class="nav-button" data-screen="requests">♡ <span>Requests</span><i id="request-count" hidden></i></a>
+          <a href="/profile" class="nav-button" data-screen="profile">⚙ <span>Profile</span></a>
+        </nav>
+        <button id="logout" class="logout" type="button">↪ Log out</button>
+        <div class="privacy-note">
+          ◈ <span><b>Private by design</b><small>One person at a time. No groups.</small></span>
+        </div>
+      </aside>
+
+      <section class="content">
+        <!-- Conversation List Screen -->
+        <section id="screen-chats" class="screen">
+          <header class="screen-header">
+            <div>
+              <p class="eyebrow">MESSAGES</p>
+              <h2>Your conversations</h2>
+            </div>
+            <a href="/discover" class="primary small" style="text-decoration:none">Find someone</a>
+          </header>
+          <div id="conversation-list" class="list"></div>
+        </section>
+
+        <!-- Active Chat Screen -->
+        <section id="screen-chat" class="chat-screen" hidden>
+          <header class="chat-header">
+            <button id="back-to-chats" class="back" aria-label="Back to messages">‹</button>
+            <span id="chat-avatar" class="avatar"></span>
+            <div>
+              <h2 id="chat-name"></h2>
+              <p id="chat-handle"></p>
+            </div>
+          </header>
+          <div id="chat-messages" class="chat-messages"></div>
+          <div class="composer-area">
+            <div id="emoji-menu" class="emoji-menu" hidden>
+              <button type="button">😀</button>
+              <button type="button">😂</button>
+              <button type="button">🥰</button>
+              <button type="button">👍</button>
+              <button type="button">❤️</button>
+              <button type="button">🎉</button>
+              <button type="button">😢</button>
+              <button type="button">🙏</button>
+              <button type="button">🔥</button>
+              <button type="button">👀</button>
+            </div>
+            <form id="message-form" class="composer">
+              <button id="emoji-toggle" class="icon" type="button" aria-label="Add emoji">☺</button>
+              <label class="icon attachment" aria-label="Attach image, video, or audio">⌕
+                <input id="media-input" type="file" accept="image/*,video/*,audio/*">
+              </label>
+              <input id="message-text" type="text" maxlength="4000" autocomplete="off" placeholder="Write a message">
+              <button id="send" class="send" type="submit" aria-label="Send">➤</button>
+            </form>
+            <small id="file-name"></small>
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+  <div id="toast" hidden></div>
+  <script src="shared.js"></script>
+  <script src="index.js"></script>
+</body>
+</html>
