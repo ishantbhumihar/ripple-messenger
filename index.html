@@ -52,6 +52,10 @@
               <h2 id="chat-name"></h2>
               <p id="chat-handle"></p>
             </div>
+            <div class="chat-actions" aria-label="Call options">
+              <button class="call-button" type="button" data-call-type="audio" aria-label="Start voice call" title="Voice call">☎</button>
+              <button class="call-button" type="button" data-call-type="video" aria-label="Start video call" title="Video call">▣</button>
+            </div>
           </header>
           <div id="chat-messages" class="chat-messages"></div>
           <div class="composer-area">
@@ -81,6 +85,27 @@
       </section>
     </section>
   </main>
+  <section id="call-panel" class="call-panel" hidden role="dialog" aria-modal="true" aria-labelledby="call-status">
+    <div class="call-card">
+      <div class="call-stage">
+        <video id="remote-video" autoplay playsinline aria-label="Remote caller video"></video>
+        <div id="call-avatar" class="call-avatar"></div>
+        <video id="local-video" autoplay muted playsinline aria-label="Your camera preview"></video>
+      </div>
+      <div class="call-copy">
+        <p id="call-status" role="status">Calling…</p>
+        <small id="call-detail">Connecting your private call</small>
+      </div>
+      <div class="call-controls">
+        <button id="answer-call" class="answer-call" type="button" hidden>Answer</button>
+        <button id="decline-call" class="secondary-call" type="button" hidden>Decline</button>
+        <button id="mute-call" class="secondary-call" type="button" hidden aria-label="Mute microphone">Mute</button>
+        <button id="camera-call" class="secondary-call" type="button" hidden aria-label="Turn camera off">Camera</button>
+        <button id="end-call" class="end-call" type="button">End call</button>
+      </div>
+      <p class="call-note">Calls are peer-to-peer. Keep this chat open while connecting.</p>
+    </div>
+  </section>
   <div id="toast" hidden></div>
   <script src="shared.js"></script>
   <script src="index.js"></script>

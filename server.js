@@ -27,6 +27,10 @@ function loadDatabase() {
 }
 let database = loadDatabase();
 let writeQueue = Promise.resolve();
+// WebRTC call setup data is intentionally short-lived. Audio and video travel
+// directly between participants; the server only relays encrypted setup signals.
+let callEvents = [];
+let nextCallEventId = 1;
 function saveDatabase() {
   writeQueue = writeQueue.catch((err) => {
     console.error("Previous database write failed:", err);
@@ -133,6 +137,18 @@ function findConversation(conversationId, userId) {
 }
 function counterpart(chat, userId) { return chat.userA === userId ? chat.userB : chat.userA; }
 function requestView(item, userId) { return { id: item.id, status: item.status, direction: item.senderId === userId ? "sent" : "received", person: publicUser(database.users.find((user) => user.id === (item.senderId === userId ? item.receiverId : item.senderId))), createdAt: item.createdAt }; }
+function pruneCallEvents() {
+  const oldest = Date.now() - 10 * 60 * 1000;
+  callEvents = callEvents.filter((event) => new Date(event.createdAt).getTime() >= oldest);
+}
+function validCallPayload(type, payload) {
+  if (!payload || typeof payload !== "object" || Array.isArray(payload)) return false;
+  if (type === "offer" || type === "answer") {
+    return typeof payload.description?.type === "string" && typeof payload.description?.sdp === "string" && payload.description.sdp.length <= 20000;
+  }
+  if (type === "candidate") return JSON.stringify(payload.candidate || {}).length <= 6000;
+  return Object.keys(payload).length === 0;
+}
 
 async function api(request, response, pathname, url) {
   if (request.method === "POST" && pathname === "/api/auth/signup") {
@@ -230,6 +246,26 @@ async function api(request, response, pathname, url) {
       return { id: chat.id, person: publicUser(database.users.find((item) => item.id === counterpart(chat, user.id))), createdAt: chat.createdAt, latest: latest ? { text: latest.text, mediaType: latest.mediaType, createdAt: latest.createdAt } : null };
     }).sort((a, b) => (b.latest?.createdAt || b.createdAt).localeCompare(a.latest?.createdAt || a.createdAt));
     return send(response, 200, { conversations });
+  }
+  const callEventMatch = /^\/api\/conversations\/([\w-]+)\/call-events$/.exec(pathname);
+  if (callEventMatch && request.method === "GET") {
+    const chat = findConversation(callEventMatch[1], user.id); if (!chat) return fail(response, 404, "Conversation not found.");
+    pruneCallEvents();
+    const after = Math.max(0, Number(url.searchParams.get("after")) || 0);
+    const events = callEvents.filter((event) => event.conversationId === chat.id && event.senderId !== user.id && event.id > after);
+    return send(response, 200, { events, cursor: nextCallEventId - 1 });
+  }
+  if (callEventMatch && request.method === "POST") {
+    const chat = findConversation(callEventMatch[1], user.id); if (!chat) return fail(response, 404, "Conversation not found.");
+    const body = await readJson(request);
+    const type = cleanText(body.type, 20);
+    const callId = cleanText(body.callId, 80);
+    if (!["offer", "answer", "candidate", "end", "decline"].includes(type) || !/^[a-zA-Z0-9-]{8,80}$/.test(callId) || !validCallPayload(type, body.payload || {})) {
+      return fail(response, 400, "Invalid call signal.");
+    }
+    pruneCallEvents();
+    callEvents.push({ id: nextCallEventId++, conversationId: chat.id, senderId: user.id, type, callId, payload: body.payload || {}, createdAt: new Date().toISOString() });
+    return send(response, 201, { ok: true });
   }
   const messageMatch = /^\/api\/conversations\/([\w-]+)\/messages$/.exec(pathname);
   if (messageMatch && request.method === "GET") {
@@ -354,4 +390,3 @@ process.on("SIGINT", () => gracefulShutdown("SIGINT"));
 process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
 
 server.listen(PORT, () => console.log(`keep it private is running at http://localhost:${PORT}`));
-
