@@ -1,0 +1,19 @@
+# Runtime data belongs on the server, not in source control.
+data/
+
+# Node/npm local files
+node_modules/
+npm-debug.log*
+*.log
+
+# OS & Editor generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.local
+
